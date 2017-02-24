@@ -1,4 +1,5 @@
 ﻿using System;
+using LiteDB.Explorer.Core;
 
 namespace LiteDB.Explorer.Windows
 {
@@ -7,6 +8,7 @@ namespace LiteDB.Explorer.Windows
         [STAThread]
         public static void Main(string[] args)
         {
+            LiteDbApplication.Run(typeof(Program).Assembly);
         }
     }
 }

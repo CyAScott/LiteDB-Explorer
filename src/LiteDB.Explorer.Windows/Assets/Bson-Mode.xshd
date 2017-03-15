@@ -1,0 +1,42 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="Bson" extensions=".bson" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Numbers" foreground="DarkBlue" exampleText="3.14" />
+	<Color name="DoubleQuotedString" foreground="Sienna" exampleText="&quot;hello world&quot;" />
+	<Color name="SingleQuotedString" foreground="Sienna" exampleText="'hello world'" />
+	<Color name="BsonLiterals" foreground="Blue" exampleText="false" />
+	<Color name="BsonTypes" foreground="Blue" exampleText="ObjectId" />
+	<RuleSet ignoreCase="false">
+		<Rule color="Numbers">[-+]?(\d+([,.]\d*)?|[,.]\d+)</Rule>
+		<Span color="DoubleQuotedString" multiline="true">
+			<Begin>"</Begin>
+			<End>"</End>
+			<RuleSet>
+				<Span begin="\\" end="." />
+			</RuleSet>
+		</Span>
+		<Span color="SingleQuotedString">
+			<Begin>'</Begin>
+			<End>'</End>
+			<RuleSet>
+				<Span begin="\\" end="." />
+			</RuleSet>
+		</Span>
+		<Keywords color="BsonLiterals">
+			<Word>false</Word>
+			<Word>null</Word>
+			<Word>true</Word>
+		</Keywords>
+		<Keywords color="BsonTypes">
+			<Word>Int</Word>
+			<Word>Long</Word>
+			<Word>Double</Word>
+			<Word>Decimal</Word>
+			<Word>Binary</Word>
+			<Word>ObjectId</Word>
+			<Word>Guid</Word>
+			<Word>ISODate</Word>
+			<Word>MaxValue</Word>
+			<Word>MinValue</Word>
+		</Keywords>
+	</RuleSet>
+</SyntaxDefinition>

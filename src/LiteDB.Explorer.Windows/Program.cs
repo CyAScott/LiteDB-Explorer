@@ -8,7 +8,10 @@ namespace LiteDB.Explorer.Windows
         [STAThread]
         public static void Main(string[] args)
         {
-            LiteDbApplication.Run(typeof(Program).Assembly);
+            LiteDbApplication.Run(new SetupArgs
+            {
+                Assembly = typeof(Program).Assembly
+            });
         }
     }
 }

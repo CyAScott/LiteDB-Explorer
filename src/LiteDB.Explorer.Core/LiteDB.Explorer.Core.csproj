@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{06E085F2-CDBA-4C3F-863F-94FD5BBB410E}</ProjectGuid>
+    <ProjectGuid>{3005EF9A-1394-4238-8C94-372D31723BB8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LiteDB.Explorer.Core</RootNamespace>
@@ -20,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\LiteDB.Explorer.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,8 +34,12 @@
       <HintPath>..\packages\Eto.Forms.2.3.0\lib\net45\Eto.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LiteDB, Version=3.1.0.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.3.1.0\lib\net35\LiteDB.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.3\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.4.4\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SimpleInjector, Version=3.3.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
@@ -51,21 +54,41 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\BaseCommand.cs" />
+    <Compile Include="Controls\CollectionTreeItem.cs" />
+    <Compile Include="Controls\EtoControls\SyntaxHighlightingTextBox.cs" />
+    <Compile Include="Controls\MainSplitter.cs" />
+    <Compile Include="Controls\MultiTabControl.cs" />
+    <Compile Include="Controls\OpenedDatabaseTree.cs" />
+    <Compile Include="Controls\OpenedDatabaseTreeItem.cs" />
+    <Compile Include="Controls\QueryPageControl.cs" />
+    <Compile Include="Dialogs\AddCollectionDialog.cs" />
+    <Compile Include="Dialogs\GetDocumentDialog.cs" />
+    <Compile Include="Extensions\BsonDocumentExtensions.cs" />
+    <Compile Include="Extensions\QueryExtensions.cs" />
     <Compile Include="Forms\MainForm.cs" />
     <Compile Include="Forms\MainFormModel.cs" />
     <Compile Include="Helpers\BaseModel.cs" />
+    <Compile Include="Helpers\ClipboardController.cs" />
+    <Compile Include="IocPackages\FormsPackages.cs" />
     <Compile Include="LiteDbApplication.cs" />
-    <Compile Include="Packages\FormsPackages.cs" />
+    <Compile Include="Models\CollectionModel.cs" />
+    <Compile Include="Models\DatabaseModel.cs" />
+    <Compile Include="Models\QueryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Db.ico" />
+    <EmbeddedResource Include="Assets\Icons\Copy.ico" />
+    <EmbeddedResource Include="Assets\Icons\Cut.ico" />
+    <EmbeddedResource Include="Assets\Icons\Db.ico" />
+    <EmbeddedResource Include="Assets\Icons\Export.ico" />
+    <EmbeddedResource Include="Assets\Icons\New.ico" />
+    <EmbeddedResource Include="Assets\Icons\Open.ico" />
+    <EmbeddedResource Include="Assets\Icons\Paste.ico" />
+    <EmbeddedResource Include="Assets\Icons\Search.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

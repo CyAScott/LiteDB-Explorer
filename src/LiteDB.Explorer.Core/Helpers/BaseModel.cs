@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Eto.Forms;
+
 // ReSharper disable AssignNullToNotNullAttribute
 
 namespace LiteDB.Explorer.Core.Helpers
@@ -35,7 +37,7 @@ namespace LiteDB.Explorer.Core.Helpers
         protected void Set<T>(T value, [CallerMemberName]string memberName = null)
         {
             Values[memberName] = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+            Application.Instance.Invoke(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName)));
         }
 
         /// <summary>

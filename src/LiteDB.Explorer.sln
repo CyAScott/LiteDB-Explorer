@@ -9,10 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteDB.Explorer.Tests", "Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteDB.Explorer.Windows", "LiteDB.Explorer.Windows\LiteDB.Explorer.Windows.csproj", "{AB5C860E-7736-4F2B-B4DC-D7684893694E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eto - pcl", "..\..\Eto\Source\Eto\Eto - pcl.csproj", "{35EF0A4E-2A1A-492C-8BED-106774EA09F2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eto.Wpf - net45", "..\..\Eto\Source\Eto.Wpf\Eto.Wpf - net45.csproj", "{63137FA0-CA55-11E3-9C1A-0800200C9A66}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,14 +27,6 @@ Global
 		{AB5C860E-7736-4F2B-B4DC-D7684893694E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB5C860E-7736-4F2B-B4DC-D7684893694E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB5C860E-7736-4F2B-B4DC-D7684893694E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35EF0A4E-2A1A-492C-8BED-106774EA09F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35EF0A4E-2A1A-492C-8BED-106774EA09F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35EF0A4E-2A1A-492C-8BED-106774EA09F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35EF0A4E-2A1A-492C-8BED-106774EA09F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63137FA0-CA55-11E3-9C1A-0800200C9A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63137FA0-CA55-11E3-9C1A-0800200C9A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63137FA0-CA55-11E3-9C1A-0800200C9A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63137FA0-CA55-11E3-9C1A-0800200C9A66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

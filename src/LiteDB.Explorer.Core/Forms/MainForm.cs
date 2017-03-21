@@ -212,7 +212,15 @@ namespace LiteDB.Explorer.Core.Forms
 
                         if (openFileDialog.ShowDialog(ParentForm) == DialogResult.Ok)
                         {
-                            ViewModel.Open(db = new LiteDatabase(openFileDialog.FileName), openFileDialog.FileName);
+                            using (var connectionStringDialog = new ConnectionStringDialog(openFileDialog.FileName))
+                            {
+                                var connectionString = connectionStringDialog.ShowModal(ParentForm);
+
+                                if (connectionStringDialog.DialogResult == DialogResult.Ok)
+                                {
+                                    ViewModel.Open(db = new LiteDatabase(connectionString), openFileDialog.FileName);
+                                }
+                            }
                         }
                     }
                 }

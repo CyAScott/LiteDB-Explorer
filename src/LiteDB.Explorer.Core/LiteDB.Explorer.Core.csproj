@@ -63,6 +63,7 @@
     <Compile Include="Controls\OpenedDatabaseTreeItem.cs" />
     <Compile Include="Controls\QueryPageControl.cs" />
     <Compile Include="Dialogs\AddCollectionDialog.cs" />
+    <Compile Include="Dialogs\ConnectionStringDialog.cs" />
     <Compile Include="Dialogs\GetDocumentDialog.cs" />
     <Compile Include="Extensions\BsonDocumentExtensions.cs" />
     <Compile Include="Extensions\QueryExtensions.cs" />

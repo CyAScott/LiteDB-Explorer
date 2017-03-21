@@ -56,7 +56,7 @@ namespace LiteDB.Explorer.Core.Extensions
                 return Query.EQ(field, BsonValue.Null)
                     .Or(Query.Not(valueAsDoc.ToQuery(field) ?? Query.EQ(field, new BsonDocument())));
             }
-            return Query.Not(Query.EQ(field, value.ToBsonValue()));
+            return Query.Not(field, value.ToBsonValue());
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace LiteDB.Explorer.Core.Extensions
                 var valueAsDoc = orValue as Dictionary<string, object>;
                 if (valueAsDoc != null)
                 {
-                    returnValue = returnValue.Or(Query.Not(Query.EQ(field, BsonValue.Null))
+                    returnValue = returnValue.Or(Query.Not(field, BsonValue.Null)
                         .And(valueAsDoc.ToQuery(field) ?? Query.EQ(field, new BsonDocument())));
                 }
                 else

@@ -49,15 +49,6 @@ namespace LiteDB.Explorer.Core
                     
                     args.BeforeRunning?.Invoke(args);
 
-                    Task.Delay(500).ContinueWith(t =>
-                    {
-                        application.Invoke(() =>
-                        {
-                            var viewModel = container.GetInstance<MainFormModel>();
-
-                            viewModel.Open(new LiteDatabase(@"D:\newfile.db"), @"D:\newfile.db");
-                        });
-                    });
                     application.Run();
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Eto.Forms;
 using LiteDB.Explorer.Core.Forms;
@@ -48,6 +49,28 @@ namespace LiteDB.Explorer.Core
                     application.MainForm = container.GetInstance<MainForm>();
                     
                     args.BeforeRunning?.Invoke(args);
+
+                    if (args.OpenFiles?.Length > 0)
+                    {
+                        var viewModel = args.IocContainer.GetInstance<MainFormModel>();
+
+                        foreach (var connectionString in args.OpenFiles)
+                        {
+                            try
+                            {
+                                viewModel.Open(new LiteDatabase(connectionString), connectionString.IndexOf(';') == -1 ?
+                                    connectionString : 
+                                    Regex.Match(connectionString, @"Filename\s*=.*[;$]", RegexOptions.IgnoreCase).ToString().Substring(10).TrimEnd(';'));
+                            }
+                            catch (Exception error)
+                            {
+                                MessageBox.Show(error.Message,
+                                    "Open File Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxType.Error);
+                            }
+                        }
+                    }
 
                     application.Run();
                 }
@@ -102,5 +125,10 @@ namespace LiteDB.Explorer.Core
         /// The main form for the app.
         /// </summary>
         public MainForm MainForm => Application?.MainForm as MainForm;
+
+        /// <summary>
+        /// Files to open on load.
+        /// </summary>
+        public string[] OpenFiles { get; set; }
     }
 }

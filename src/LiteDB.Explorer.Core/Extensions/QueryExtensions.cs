@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace LiteDB.Explorer.Core.Extensions
 {
@@ -80,6 +81,11 @@ namespace LiteDB.Explorer.Core.Extensions
                     returnValue = returnValue.Or(Query.Not(field, BsonValue.Null)
                         .And(valueAsDoc.ToQuery(field) ?? Query.EQ(field, new BsonDocument())));
                 }
+                else if (orValue is Regex)
+                {
+                    var regex = (Regex)orValue;
+                    returnValue = returnValue.And(Query.Where(field, bsonValue => bsonValue != null && bsonValue.IsString && regex.IsMatch(bsonValue.AsString)));
+                }
                 else
                 {
                     returnValue = returnValue.Or(Query.EQ(field, orValue.ToBsonValue()));
@@ -154,6 +160,11 @@ namespace LiteDB.Explorer.Core.Extensions
                     {
                         returnValue = returnValue.And(valueAsDoc.ToQuery(path) ?? Query.EQ(path, new BsonDocument()));
                     }
+                }
+                else if (pair.Value is Regex)
+                {
+                    var regex = (Regex)pair.Value;
+                    returnValue = returnValue.And(Query.Where(path, bsonValue => bsonValue != null && bsonValue.IsString && regex.IsMatch(bsonValue.AsString)));
                 }
                 else
                 {

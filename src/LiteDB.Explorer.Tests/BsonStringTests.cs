@@ -208,7 +208,7 @@ namespace LiteDB.Explorer.Tests
         }
         
         [Test]
-        public void TextParsing()
+        public void BsonParsing()
         {
             var doc = getTestDocument();
 
@@ -249,6 +249,21 @@ namespace LiteDB.Explorer.Tests
             Assert.AreEqual(parsedDoc.Count, 2);
             Assert.AreEqual(parsedDoc["3"].AsInt32, 123);
             Assert.AreEqual(parsedDoc["4"].AsInt32, 456);
+        }
+
+        [Test]
+        public void RegexParsing()
+        {
+            var regex = new Regex(@"\/\.\$\^\{\[\(\|\)\*\+\?\\\a\b\d\D\e\f\n\p{Lu}\P{Lu}\r\s\S\t\v\w\W\0\00\xFF\cA\cz\u0F0F hello world", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var text = $"{{regex:/{regex}/i}}";
+            var doc = text.ParseDocument();
+
+            Assert.IsNotNull(doc);
+            Assert.IsTrue(doc.ContainsKey("regex"));
+            Assert.IsTrue(doc["regex"] is Regex);
+            var regexCopy = (Regex)doc["regex"];
+            Assert.AreEqual(regexCopy.ToString(), regex.ToString());
+            Assert.AreEqual(regexCopy.Options, regex.Options);
         }
     }
 }

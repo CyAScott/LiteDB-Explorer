@@ -10,7 +10,8 @@ namespace LiteDB.Explorer.Windows
         {
             LiteDbApplication.Run(new SetupArgs
             {
-                Assembly = typeof(Program).Assembly
+                Assembly = typeof(Program).Assembly,
+                OpenFiles = args
             });
         }
     }

@@ -33,6 +33,13 @@ namespace LiteDB.Explorer.Core.Extensions
     /// </summary>
     public static class BsonDocumentExtensions
     {
+        private static Dictionary<char, int> regexOptions = new Dictionary<char, int>
+        {
+            {'i', (int)RegexOptions.IgnoreCase},
+            {'m', (int)RegexOptions.Multiline},
+            {'s', (int)RegexOptions.Singleline},
+            {'x', (int)RegexOptions.IgnorePatternWhitespace}
+        };
         private static int indexOf(this string text, Func<char, bool> match, Func<char, bool> errorMatch, int index)
         {
             for (; index < text.Length; index++)
@@ -175,6 +182,49 @@ namespace LiteDB.Explorer.Core.Extensions
 
             throw new ArgumentException($"Error parsing array at ({text.Take(index).Count(c => c == '\n')}, {index - text.LastIndexOf('\n')}).");
         }
+        private static Regex parseRegex(this string text, ref int index)
+        {
+            var builder = new StringBuilder();
+
+            try
+            {
+                for (index++; index < text.Length; index++)
+                {
+                    switch (text[index])
+                    {
+                        case '/':
+                            var options = Regex.Match(text.Substring(index), "^/[smix]{0,4}").ToString().Substring(1);
+
+                            index += options.Length;
+
+                            return new Regex(builder.ToString(), RegexOptions.Compiled | (RegexOptions)options
+                                .AsEnumerable()
+                                .Distinct()
+                                .Select(c => regexOptions[c])
+                                .Sum());
+
+                        case '\\':
+                            var escapedItem = Regex.Match(text.Substring(index), @"^\\([\/\.\$\^\{\[\(\|\)\*\+\?\\abdDefnpPrsStvwW]|\d|[89]\d|x[a-fA-F\d]{2}|c[a-zA-Z]|u[a-fA-F\d]{4})").ToString();
+                            if (string.IsNullOrEmpty(escapedItem))
+                            {
+                                throw new IndexOutOfRangeException();
+                            }
+                            index += escapedItem.Length - 1;
+                            builder.Append(escapedItem);
+                            break;
+
+                        default:
+                            builder.Append(text[index]);
+                            break;
+                    }
+                }
+                throw new IndexOutOfRangeException();
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentException($"Error parsing string at ({text.Take(index).Count(c => c == '\n')}, {index - text.LastIndexOf('\n')}).");
+            }
+        }
         private static object documentToType(Dictionary<string, object> doc)
         {
             if (doc.Count == 1)
@@ -312,6 +362,14 @@ namespace LiteDB.Explorer.Core.Extensions
                 return valueAsString;
             }
 
+            if (text[index] == '/')
+            {
+                var valueAsRegex = text.parseRegex(ref index);
+                index++;
+
+                return valueAsRegex;
+            }
+
             if (text[index] == '[')
             {
                 return parseArray(text, ref index);
@@ -344,7 +402,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var number = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')');
+                var number = Regex.Match(startText, @"\(\s*[-+]?\d+\s*\)").ToString().Trim('(', ')').Trim();
 
                 return int.Parse(number);
             }
@@ -353,7 +411,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var number = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')');
+                var number = Regex.Match(startText, @"\(\s*[-+]?(\d+([,.]\d*)?|[,.]\d+)\s*\)").ToString().Trim('(', ')').Trim();
 
                 return double.Parse(number);
             }
@@ -362,7 +420,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var number = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')');
+                var number = Regex.Match(startText, @"\(\s*[-+]?\d+\s*\)").ToString().Trim('(', ')').Trim();
 
                 return long.Parse(number);
             }
@@ -371,7 +429,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var number = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')');
+                var number = Regex.Match(startText, @"\(\s*[-+]?(\d+([,.]\d*)?|[,.]\d+)\s*\)").ToString().Trim('(', ')').Trim();
 
                 return decimal.Parse(number, NumberStyles.Float);
             }
@@ -380,7 +438,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var binary = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')').Trim().Trim('"');
+                var binary = Regex.Match(startText, @"\(\s*""(?:[a-z\d+/]{4})*(?:[a-z\d+/]{2}==|[a-z\d+/]{3}=)?""\s*\)").ToString().Trim('(', ')').Trim().Trim('"');
 
                 return Convert.FromBase64String(binary);
             }
@@ -389,7 +447,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var id = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')').Trim().Trim('"');
+                var id = Regex.Match(startText, @"\(\s*""[a-f\d]{24}""\s*\)").ToString().Trim('(', ')').Trim().Trim('"');
 
                 return new ObjectId(id);
             }
@@ -398,7 +456,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var id = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')').Trim().Trim('"');
+                var id = Regex.Match(startText, @"\(\s*""[a-f\d]{8}[-]?([a-f\d]{4}[-]?){3}[a-f\d]{12}""\s*\)").ToString().Trim('(', ')').Trim().Trim('"');
 
                 return new Guid(id);
             }
@@ -407,7 +465,7 @@ namespace LiteDB.Explorer.Core.Extensions
             {
                 index += startText.IndexOf(')') + 1;
 
-                var dateTime = Regex.Match(startText, @"\(.*\)").ToString().Trim('(', ')').Trim().Trim('"');
+                var dateTime = Regex.Match(startText, @"\(\s*""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{7}Z""\s*\)").ToString().Trim('(', ')').Trim().Trim('"');
 
                 return DateTime.Parse(dateTime, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
             }
